@@ -24,7 +24,7 @@ package by.azargan.problems;
 
 public class Problem26 {
     final static int DENOM_LIMIT = 1000;
-    final static int RESULT_LENGTH_LIMIT = 1000;
+    final static int RESULT_LENGTH_LIMIT = 1000000;
     static int denominator = 1;
     static int answer = 1;
     static int maxLength = 1;    
