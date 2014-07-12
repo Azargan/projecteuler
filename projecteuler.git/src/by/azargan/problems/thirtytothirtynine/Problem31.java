@@ -16,6 +16,8 @@
 package by.azargan.problems.thirtytothirtynine;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,78 +46,22 @@ public class Problem31 {
         ONE_POUND,
         TWO_POUND
     };
-    private static Map<Integer, Integer> coins = new HashMap<>();
 
-    private static int calcCurrentSum() {
-        int sum = 0;
-        for (Map.Entry<Integer, Integer> coin : coins.entrySet()) {
-            sum += coin.getKey() * coin.getValue();
-        }
-        return sum;
-    }
+    private static HashMap<Integer, LinkedList<Integer>> rules = new HashMap<>();
 
-    private static int changeCoins() {
-        int biggestCoin = findBiggestCoin();
-        int possibleWays = 1;
-        while (biggestCoin != ONE_PENCE) {
-            if (replaceCoins(biggestCoin) &&
-                    calcCurrentSum() == FINAL_SUM) {
-                possibleWays++;
-            }
-            biggestCoin = findBiggestCoin();
-        }
-        return possibleWays;
-    }
-
-    private static boolean replaceCoins(int coin) {
-        int coinIndex = getCoinIndex(coin);
-        if (coinIndex < 1) {        // if it's pence or not found at all
-            return false;
-        }
-        int smallCoin = availableCoins[coinIndex - 1];
-        if ((coin % smallCoin) == 0) {
-            coins.put(coin, coins.get(coin) - 1);
-            coins.put(smallCoin, coins.get(smallCoin) + coin / smallCoin);
-            return true;
-        }
-        if (getCoinIndex(smallCoin) < 1) {
-            return false;
-        }
-        int verySmallCoin = availableCoins[getCoinIndex(smallCoin) - 1];
-        coins.put(coin, coins.get(coin) - 1);
-        coins.put(smallCoin, coins.get(smallCoin) + coin / smallCoin);
-        coins.put(verySmallCoin, coins.get(verySmallCoin) + coin % smallCoin);
-        return true;
-    }
-
-    private static int getCoinIndex(int coin) {
-        int coinIndex = -1;
-        for (int i = 0; i < availableCoins.length; i++) {
-            if (coin == availableCoins[i]) {
-                coinIndex = i;
-            }
-        }
-        return coinIndex;
-    }
-
-    private static int findBiggestCoin() {
+    private static void createRule(int coin) {
+        int sum = coin;
+        List<Integer> replaceCoins = new LinkedList<>();
         for (int i = availableCoins.length - 1; i >= 0; i--) {
-            if (coins.get(availableCoins[i]) > 0) {
-                return availableCoins[i];
+            int currentCoin = availableCoins[i];
+            if ((sum - currentCoin) > 0) {
+                sum -= currentCoin;
+                replaceCoins.add(currentCoin);
             }
-        }
-        return -1;
-    }
-
-    private static void fillStartCoins() {
-        for (int i = 0; i < availableCoins.length; i++) {
-            coins.put(availableCoins[i], 0);
         }
     }
 
     public static void main(String[] args) {
-        fillStartCoins();
-        coins.put(TWO_POUND, 1);
-        System.out.println("Answer is : " + changeCoins());
+
     }
 }
