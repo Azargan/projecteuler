@@ -15,53 +15,131 @@
 
 package by.azargan.problems.thirtytothirtynine;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @date   7/12/2014
  * @author Aliaksei_Vihuro
  */
 public class Problem31 {
-    private static final int FINAL_SUM = 200;
-
-    private static final int ONE_PENCE = 1;
-    private static final int TWO_PENCE = 2;
-    private static final int FIVE_PENCE = 5;
-    private static final int TEN_PENCE = 10;
-    private static final int TWENTY_PENCE = 20;
-    private static final int FIFTY_PENCE = 50;
-    private static final int ONE_POUND = 100;
-    private static final int TWO_POUND = 200;
-
-    private static final int[] availableCoins = {
-        ONE_PENCE,
-        TWO_PENCE,
-        FIVE_PENCE,
-        TEN_PENCE,
-        TWENTY_PENCE,
-        FIFTY_PENCE,
-        ONE_POUND,
-        TWO_POUND
-    };
-
-    private static HashMap<Integer, LinkedList<Integer>> rules = new HashMap<>();
-
-    private static void createRule(int coin) {
-        int sum = coin;
-        List<Integer> replaceCoins = new LinkedList<>();
-        for (int i = availableCoins.length - 1; i >= 0; i--) {
-            int currentCoin = availableCoins[i];
-            if ((sum - currentCoin) > 0) {
-                sum -= currentCoin;
-                replaceCoins.add(currentCoin);
-            }
-        }
+    private static void printCoins(List<Coin> coins) {
+        coins.stream().forEach((coin) -> {
+            System.out.print(coin.toString() + ";");
+        });
+        System.out.println();
     }
 
     public static void main(String[] args) {
-
+        List<Coin> coins = new LinkedList<>();
+        coins.add(Coin.TEN_PENCE);
+        int count = 0;
+        int countOfCoinsBefore = 0;
+        int countOfCoinsNow = 1;
+        while (countOfCoinsBefore != countOfCoinsNow) {
+            count++;
+            coins.addAll(Coin.getBiggestCoin(coins).exchangeCoin());
+            coins.remove(Coin.getBiggestCoin(coins));
+            countOfCoinsBefore = countOfCoinsNow;
+            countOfCoinsNow = coins.size();
+            printCoins(coins);
+        }
+        System.out.println("Answer is " + count);
     }
+}
+
+enum Coin {
+    ONE_PENCE(1),
+    TWO_PENCE (2),
+    FIVE_PENCE (5),
+    TEN_PENCE (10),
+    TWENTY_PENCE (20),
+    FIFTY_PENCE (50),
+    ONE_POUND (100),
+    TWO_POUND (200);
+
+    Coin(int weight) {
+        this.weight = weight;
+    }
+
+    private final int weight;
+
+    /**
+     * Get the value of weight
+     *
+     * @return the value of weight
+     */
+    public int getWeight() {
+        return weight;
+    }
+
+    public List<Coin> exchangeCoin() {
+        return exchangeCoin(this);
+    }
+
+    public List<Coin> exchangeCoin(Coin coin) {
+        List<Coin> exchange = new LinkedList<>();
+        int needToExchange = coin.getWeight();
+        Coin currentCoin = coin;
+        while (needToExchange > 0) {
+            List<Coin> lessCoins = getCoinsLessThan(currentCoin);
+            Coin excangeCoin;
+            if (lessCoins.isEmpty()) {
+                excangeCoin = currentCoin;
+            } else {
+                excangeCoin = getBiggestCoin(lessCoins);
+            }
+            needToExchange -= excangeCoin.getWeight();
+            exchange.add(excangeCoin);
+            if (needToExchange < excangeCoin.getWeight()) {
+                currentCoin = excangeCoin;
+            }
+        }
+        return exchange;
+    }
+
+    public static Coin getBiggestCoin(List<Coin> coins) {
+        if (coins.isEmpty()) {
+            throw new RuntimeException("Can't find biggest coin in empty list");
+        }
+
+        Coin coin = null;
+        int maxWeight = -1;
+        for (Coin currentCoin : coins) {
+            if (currentCoin.getWeight() > maxWeight) {
+                maxWeight = currentCoin.getWeight();
+                coin = currentCoin;
+            }
+        }
+
+        if (coin == null) {
+            throw new RuntimeException("Can't find biggest coin. It's null :(");
+        }
+
+        return coin;
+    }
+
+    public static List<Coin> getCoinsLessThan(Coin coin) {
+        if (coin == null) {
+            throw new RuntimeException("They can't be less than null");
+        }
+
+        Coin[] availableCoins = values();
+        List<Coin> coins = new LinkedList<>();
+        for (Coin currentCoin : availableCoins) {
+            if (coin.getWeight() > currentCoin.getWeight()) {
+                coins.add(currentCoin);
+            }
+        }
+
+        return coins;
+    }
+
+    @Override
+    public String toString() {
+        return ((this.getWeight() / 100) == 0)
+                ? this.getWeight() + "p"
+                : (this.getWeight() / 100) + "£";
+    }
+
 }
