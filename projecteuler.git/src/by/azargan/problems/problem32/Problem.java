@@ -17,6 +17,7 @@
 //<editor-fold defaultstate="collapsed" desc="ANSWER">
 //SOLVED: Answer is 45228
 //</editor-fold>
+
 package by.azargan.problems.problem32;
 
 import java.util.Collection;

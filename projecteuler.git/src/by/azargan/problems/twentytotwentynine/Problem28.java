@@ -9,9 +9,12 @@
  * (17)  16  15  14  (13)
  *
  * It can be verified that the sum of the numbers on the diagonals is 101.
- * 
- * What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral 
+ *
+ * What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral
  * formed in the same way?
+ *
+ * SOLVED: Answer is 669171001
+ *
  */
 
 package by.azargan.problems.twentytotwentynine;

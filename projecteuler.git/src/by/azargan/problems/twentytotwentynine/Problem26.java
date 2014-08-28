@@ -1,7 +1,7 @@
 /*
- * A unit fraction contains 1 in the numerator. The decimal representation of 
+ * A unit fraction contains 1 in the numerator. The decimal representation of
  * the unit fractions with denominators 2 to 10 are given:
- * 
+ *
  *  1/2	 = 	0.5
  *  1/3  = 	0.(3)
  *  1/4	 = 	0.25
@@ -11,13 +11,15 @@
  *  1/8	 = 	0.125
  *  1/9	 = 	0.(1)
  *  1/10 = 	0.1
- *  
+ *
  *  Where 0.1(6) means 0.166666..., and has a 1-digit recurring cycle. It can be
  *  seen that 1/7 has a 6-digit recurring cycle.
- *  
- *  Find the value of d < 1000 for which 1/d contains the longest recurring 
+ *
+ *  Find the value of d < 1000 for which 1/d contains the longest recurring
  *  cycle in its decimal fraction part.
- *  
+ *
+ *  SOLVED: Answer is 983
+ *
  */
 
 package by.azargan.problems.twentytotwentynine;
@@ -27,8 +29,8 @@ public class Problem26 {
     final static int RESULT_LENGTH_LIMIT = 10000;
     static int denominator = 1;
     static int answer = 1;
-    static int maxLength = 1;    
-    
+    static int maxLength = 1;
+
     private static String findFraction(int denominator) {
         StringBuilder sb = new StringBuilder();
         int numerator = 1;
@@ -39,7 +41,7 @@ public class Problem26 {
         sb.deleteCharAt(0);
         return sb.toString();
     }
-    
+
     private static int checkRecurringCycleLength(String fraction) {
         if (fraction.length() < RESULT_LENGTH_LIMIT) {
             return 0;
@@ -72,7 +74,7 @@ public class Problem26 {
         }
         return length;
     }
-    
+
     public static void main(String[] args) {
         for (int i = 1; i < DENOM_LIMIT; i++) {
             int length = checkRecurringCycleLength(findFraction(denominator++));
