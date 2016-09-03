@@ -14,11 +14,12 @@ If dn represents the nth digit of the fractional part, find the value of the fol
 d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000
  */
 fun main(args: Array<String>) {
+    problem40brutforce()
     println("Answer: ${1 * 1 * 5 * 3 * 7 * 2 * 1}")
 }
 
 private fun problem40brutforce() {
-    val mantisa = (1..202222).fold("") { str, number -> str + number }
+    val mantisa = (1..202222).fold(StringBuilder()) { sb, number -> sb.append(number) }.toString()
     println("${mantisa[0]} * ${mantisa[9]} * ${mantisa[99]} * ${mantisa[999]} * ${mantisa[9999]} * ${mantisa[99999]} * ${mantisa[999999]}")
 }
 
